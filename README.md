@@ -1,23 +1,23 @@
 Language Odoo [![Build Status](https://travis-ci.org/OpenFn/language-odoo.svg?branch=master)](https://travis-ci.org/OpenFn/language-odoo)
 =============
 
+Webhooks example: https://github.com/OCA/server-tools/pull/193/files
+
 Language Pack for building expressions and operations to make calls to the  Odoo API.
 
 Documentation
 -------------
 
 #### sample configuration
-*Odoo uses oauth2. The language-package will expect to be given a valid oauth token.
-If a valid token is not provided, it will fail.
-On OpenFn.org, the `CredentialService` is responsible for making sure the the oauth token is valid each time it assembles state to hand to `execute`.*
+*Odoo uses XML-RPC and we'll just need a hostUrl, username, and password.
 ```js
-{
+<!-- {
   "configuration": {
     "resource": "https://openfn.crm2.odoo.com",
     "apiVersion": "8.2.0",
     "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IjlGWERwYmZNRlQyU3ZRdVhoODQ2WVR3RUlCdyIsI"
   }
-}
+} -->
 ```
 
 #### sample createEntity expression
