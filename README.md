@@ -1,23 +1,23 @@
 Language Odoo [![Build Status](https://travis-ci.org/OpenFn/language-odoo.svg?branch=master)](https://travis-ci.org/OpenFn/language-odoo)
 =============
 
-Webhooks example: https://github.com/OCA/server-tools/pull/193/files
-
 Language Pack for building expressions and operations to make calls to the  Odoo API.
+The Odoo Api: http://www.odoo.com/documentation/10.0/api_integration.html
+Python webhooks example: https://github.com/OCA/server-tools/pull/193/files
 
 Documentation
 -------------
 
 #### sample configuration
-*Odoo uses XML-RPC and we'll just need a hostUrl, username, and password.
+Odoo uses XML-RPC and we'll just need a hostUrl, username, and password.
 ```js
-<!-- {
-  "configuration": {
-    "resource": "https://openfn.crm2.odoo.com",
-    "apiVersion": "8.2.0",
-    "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IjlGWERwYmZNRlQyU3ZRdVhoODQ2WVR3RUlCdyIsI"
-  }
-} -->
+// {
+//   "configuration": {
+//     "resource": "https://openfn.crm2.odoo.com",
+//     "apiVersion": "8.2.0",
+//     "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IjlGWERwYmZNRlQyU3ZRdVhoODQ2WVR3RUlCdyIsI"
+//   }
+// }
 ```
 
 #### sample createEntity expression

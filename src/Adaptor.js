@@ -1,6 +1,10 @@
 import { execute as commonExecute, expandReferences } from 'language-common';
 import request from 'request';
 import { resolve as resolveUrl } from 'url';
+import { createClient } from 'odoo-client'
+var Odoo = require('node-odoo');
+const Odoo2 = require('odoo-connect');
+var xmlrpc = require('xmlrpc')
 
 /** @module Adaptor */
 
@@ -28,6 +32,168 @@ export function execute(...operations) {
 
 }
 
+export function xmlRpc() {
+
+  return state => {
+
+    const { username, database, hostUrl, password, port } = state.configuration;
+
+    var client = xmlrpc.createClient({ host: 'localhost', port: 9090, path: '/'})
+
+    return new Promise(function(resolve, reject) {
+      // Creates an XML-RPC server to listen to XML-RPC method calls
+      var server = xmlrpc.createServer({ host: hostUrl, port: 9090 })
+      // Handle methods not found
+      server.on('NotFound', function(method, params) {
+        console.log('Method ' + method + ' does not exist');
+      })
+      // Handle method calls by listening for events with the method call name
+      server.on('anAction', function (err, params, callback) {
+        console.log('Method call params for \'anAction\': ' + params)
+
+        // ...perform an action...
+
+        // Send a method response with a value
+        callback(null, 'aResult')
+      })
+      console.log('XML-RPC server listening on port 9091')
+
+      // Waits briefly to give the XML-RPC server time to start up and start
+      // listening
+      setTimeout(function () {
+        // Creates an XML-RPC client. Passes the host information on where to
+        // make the XML-RPC calls.
+        var client = xmlrpc.createClient({ host: 'localhost', port: 9090, path: '/'})
+
+        // Sends a method call to the XML-RPC server
+        client.methodCall('anAction', ['aParam'], function (error, value) {
+          // Results of the method response
+          console.log('Method response for \'anAction\': ' + value)
+        })
+
+      }, 1000)
+    });
+
+  }
+};
+
+export function odooConnect() {
+  return state => {
+
+    const { username, database, hostUrl, password, port } = state.configuration;
+
+    const odoo = new Odoo2({
+    	host: hostUrl,
+    	port
+    });
+
+    return new Promise((resolve, reject) => {
+      odoo
+      	.connect({
+      		database,
+      		username,
+      		password
+      	})
+      	.then(client => {
+          client.searchRead('product.product', [['list_price', '>', '50']], {limit: 1});
+      	})
+      	.then(products => {
+      		console.log(products);
+      		//=> [{list_price: 52, name: 'Unicorn'}]
+          resolve(products)
+      	});
+    })
+  }
+}
+
+export function odooXmlRpc() {
+
+  return state => {
+
+    var Odoo = require('odoo-xmlrpc');
+
+    const { username, database, hostUrl, password, port } = state.configuration;
+
+    var odoo = new Odoo({
+      url: hostUrl,
+      // port: port,
+      db: database,
+      username: username,
+      password: password
+    });
+
+    return new Promise((resolve, reject) => {
+
+      odoo.connect(function (err) {
+        if (err) { reject(err); }
+        console.log('Connected to Odoo server.');
+        resolve('Connected.')
+      });
+    })
+  }
+
+}
+
+export function nodeOdoo() {
+  return state => {
+    const { username, database, hostUrl, password, port } = state.configuration;
+
+    var odoo = new Odoo({
+      host: hostUrl,
+      port: port,
+      database: database,
+      username: username,
+      password: password
+    });
+
+    return new Promise((resolve, reject) => {
+      // Connect to Odoo
+      odoo.connect(function (err) {
+        if (err) { reject(err); }
+
+        // Get a partner
+        odoo.get('res.partner', 4, function (err, partner) {
+          if (err) { return console.log(err); }
+          console.log('Partner', partner);
+          resolve(partner)
+        });
+      });
+    })
+  }
+}
+
+export function odooClient() {
+
+  return state => {
+
+    const { username, database, hostUrl, password } = state.configuration;
+
+    const client = createClient({
+      location: hostUrl,
+      db: database,
+      login: username,
+      password: password,
+      autologin: false,
+    })
+
+    return new Promise((resolve, reject) => {
+
+      client.login({
+        password: 'password',
+      })
+      .then((response) => {
+        console.log(response)
+        resolve(response)
+      })
+      .catch((err) => {
+        console.error(err)
+        reject(err)
+      })
+    })
+
+  }
+
+}
 
 export function createEntity(params) {
 
