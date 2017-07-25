@@ -15,11 +15,7 @@
   ],
   "dependencies": {
     "language-common": "github:openfn/language-common#v0.0.5",
-    "node-odoo": "0.0.2",
-    "odoo": "^0.4.0",
     "odoo-client": "^0.5.2",
-    "odoo-connect": "^1.1.0",
-    "odoo-xmlrpc": "^1.0.5",
     "request": "^2.72.0",
     "xmlrpc": "^1.3.2"
   },
